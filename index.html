@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>CACCONVO 早午餐</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Noto Sans TC",
+                Arial,
+                sans-serif;
+            background: #f7f3ed;
+            color: #333;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: #fff;
+            text-align: center;
+            padding: 30px 20px 24px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #3e2c20;
+        }
+
+        .subtitle {
+            margin-top: 7px;
+            color: #8b5e3c;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+
+        /* =========================
+           TABLE SELECT
+        ========================= */
+
+        .table-box {
+            max-width: 700px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .table-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            font-size: 16px;
+        }
+
+
+
+        /* =========================
+           DINING METHOD & ITEM NOTE
+        ========================= */
+
+        .dining-method {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .dining-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .dining-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .dining-option label {
+            display: block;
+            text-align: center;
+            padding: 13px 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .dining-option input:checked + label {
+            background: #8b5e3c;
+            color: white;
+            border-color: #8b5e3c;
+            font-weight: bold;
+        }
+
+        .table-section.hidden {
+            display: none;
+        }
+
+        .note-box {
+            margin-top: 15px;
+        }
+
+        .note-box label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #3e2c20;
+        }
+
+        .note-input {
+            width: 100%;
+            min-height: 75px;
+            padding: 11px 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .note-input:focus {
+            border-color: #8b5e3c;
+        }
+
+        .cart-note,
+        .order-note {
+            color: #8b5e3c;
+            font-size: 12px;
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            padding: 10px 20px 180px;
+        }
+
+
+        /* =========================
+           CATEGORY
+        ========================= */
+
+        .category {
+            margin-top: 30px;
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .category-title h2 {
+            margin: 0;
+            font-size: 23px;
+            color: #3e2c20;
+        }
+
+        .category-title::before {
+            content: "";
+            width: 5px;
+            height: 28px;
+            background: #8b5e3c;
+            border-radius: 5px;
+        }
+
+
+        /* =========================
+           FOOD CARD
+        ========================= */
+
+        .food {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.06);
+            transition: 0.2s;
+        }
+
+        .food:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 7px 20px rgba(0,0,0,0.09);
+        }
+
+        .food-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .food h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #33251d;
+        }
+
+        .description {
+            color: #888;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-top: 7px;
+        }
+
+        .price {
+            color: #8b5e3c;
+            font-size: 18px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .add-btn {
+            width: 100%;
+            margin-top: 14px;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #8b5e3c;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #6f472c;
+        }
+
+        .add-btn:active {
+            transform: scale(0.97);
+        }
+
+
+        /* =========================
+           CART
+        ========================= */
+
+        .cart {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #ddd;
+            box-shadow:
+                0 -5px 25px rgba(0,0,0,0.12);
+            z-index: 50;
+        }
+
+        .cart-inner {
+            max-width: 700px;
+            margin: auto;
+            padding: 14px 20px;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-title {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .cart-count {
+            background: #8b5e3c;
+            color: white;
+            padding: 4px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .clear-btn {
+            border: none;
+            background: transparent;
+            color: #999;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .cart-items {
+            max-height: 180px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 0;
+            border-bottom: 1px solid #eee;
+            gap: 10px;
+        }
+
+        .cart-item-name {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quantity button {
+            width: 27px;
+            height: 27px;
+            border: none;
+            border-radius: 50%;
+            background: #eee;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .quantity span {
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .item-price {
+            min-width: 65px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .cart-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            gap: 12px;
+        }
+
+        .total {
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .order-btn {
+            flex: 1;
+            max-width: 230px;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #3e2c20;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .order-btn:hover {
+            background: #241810;
+        }
+
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            top: 90px;
+            transform: translateX(-50%) translateY(-20px);
+            background: #3e2c20;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            z-index: 100;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform:
+                translateX(-50%)
+                translateY(0);
+        }
+
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .modal-box h2 {
+            margin-top: 0;
+            color: #3e2c20;
+        }
+
+        .order-info {
+            background: #f7f3ed;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .order-list {
+            margin-bottom: 15px;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .cancel-btn {
+            background: #eee;
+        }
+
+        .confirm-btn {
+            background: #8b5e3c;
+            color: white;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            .logo {
+                font-size: 27px;
+            }
+
+            .food {
+                padding: 15px;
+            }
+
+            .food h3 {
+                font-size: 17px;
+            }
+
+            .category-title h2 {
+                font-size: 20px;
+            }
+
+            .cart-items {
+                max-height: 150px;
+            }
+
+            .cart-bottom {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .order-btn {
+                max-width: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div class="logo">
+        CACCONVO
+    </div>
+
+    <div class="subtitle">
+        早午餐專門店
+    </div>
+
+</header>
+
+
+<!-- =========================
+     TABLE
+========================= -->
+
+<div class="table-box">
+
+    <div class="table-card">
+
+        <div class="table-title">
+            🍽️ 用餐方式
+        </div>
+
+        <div class="dining-method">
+
+            <div class="dining-option">
+                <input type="radio" id="dineIn" name="diningMethod" value="內用" checked onchange="toggleTable()">
+                <label for="dineIn">🍽️ 內用</label>
+            </div>
+
+            <div class="dining-option">
+                <input type="radio" id="takeout" name="diningMethod" value="外帶" onchange="toggleTable()">
+                <label for="takeout">🥡 外帶</label>
+            </div>
+
+        </div>
+
+        <div class="table-section" id="tableSection">
+
+            <div class="table-title">
+                🪑 請選擇桌號
+            </div>
+
+            <select id="tableNumber">
+
+                <option value="">
+                    -- 請選擇桌號 --
+                </option>
+
+                <option value="1">1號桌</option>
+                <option value="2">2號桌</option>
+                <option value="3">3號桌</option>
+                <option value="4">4號桌</option>
+                <option value="5">5號桌</option>
+                <option value="6">6號桌</option>
+                <option value="7">7號桌</option>
+                <option value="8">8號桌</option>
+                <option value="9">9號桌</option>
+                <option value="10">10號桌</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MENU
+========================= -->
+
+<div class="container">
+
+
+<!-- ===== 早午餐 ===== -->
+
+<div class="category">
+
+    <div class="category-title">
+        <h2>🍳 早午餐</h2>
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>經典早午餐</h3>
+
+                <div class="description">
+                    炒蛋、培根、德式香腸、生菜、薯餅、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$90
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('經典早午餐',90)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>香煎雞腿排早午餐</h3>
+
+                <div class="description">
+                    雞腿排、炒蛋、生菜、薯餅、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$110
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('香煎雞腿排早午餐',110)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>德式香腸早午餐</h3>
+
+                <div class="description">
+                    德式香腸、炒蛋、生菜、薯餅、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$100
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('德式香腸早午餐',100)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>煙燻鮭魚早午餐</h3>
+
+                <div class="description">
+                    煙燻鮭魚、炒蛋、生菜、小番茄、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$120
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('煙燻鮭魚早午餐',120)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>火腿起司早午餐</h3>
+
+                <div class="description">
+                    火腿、起司、炒蛋、生菜、薯餅、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$95
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('火腿起司早午餐',95)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ===== 吐司 ===== -->
+
+<div class="category">
+
+    <div class="category-title">
+        <h2>🥪 吐司 / 三明治</h2>
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>火腿起司吐司</h3>
+
+                <div class="description">
+                    火腿、起司、生菜、番茄、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$65
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('火腿起司吐司',65)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>培根蛋吐司</h3>
+
+                <div class="description">
+                    培根、煎蛋、生菜、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$60
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('培根蛋吐司',60)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>雞肉起司三明治</h3>
+
+                <div class="description">
+                    雞胸肉、起司、生菜、番茄、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$75
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('雞肉起司三明治',75)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>鮪魚蛋三明治</h3>
+
+                <div class="description">
+                    鮪魚、炒蛋、生菜、玉米、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$70
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('鮪魚蛋三明治',70)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>酪梨蛋吐司</h3>
+
+                <div class="description">
+                    酪梨、煎蛋、小番茄、生菜、吐司
+                </div>
+            </div>
+
+            <div class="price">
+                NT$70
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('酪梨蛋吐司',70)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ===== 法式吐司 ===== -->
+
+<div class="category">
+
+    <div class="category-title">
+        <h2>🍞 法式吐司 / 鬆餅</h2>
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>原味法式吐司</h3>
+
+                <div class="description">
+                    吐司、雞蛋、鮮奶、蜂蜜、糖粉
+                </div>
+            </div>
+
+            <div class="price">
+                NT$60
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('原味法式吐司',60)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>香蕉法式吐司</h3>
+
+                <div class="description">
+                    吐司、香蕉、鮮奶油、蜂蜜
+                </div>
+            </div>
+
+            <div class="price">
+                NT$70
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('香蕉法式吐司',70)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>草莓法式吐司</h3>
+
+                <div class="description">
+                    吐司、草莓、鮮奶油、蜂蜜
+                </div>
+            </div>
+
+            <div class="price">
+                NT$80
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('草莓法式吐司',80)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>香蕉巧克力鬆餅</h3>
+
+                <div class="description">
+                    鬆餅、香蕉、巧克力醬、鮮奶油
+                </div>
+            </div>
+
+            <div class="price">
+                NT$75
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('香蕉巧克力鬆餅',75)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ===== 沙拉 ===== -->
+
+<div class="category">
+
+    <div class="category-title">
+        <h2>🥗 沙拉</h2>
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>雞肉沙拉</h3>
+
+                <div class="description">
+                    雞胸肉、生菜、小番茄、玉米、紫高麗、沙拉醬
+                </div>
+            </div>
+
+            <div class="price">
+                NT$75
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('雞肉沙拉',75)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>煙燻鮭魚沙拉</h3>
+
+                <div class="description">
+                    煙燻鮭魚、生菜、小番茄、玉米、水煮蛋
+                </div>
+            </div>
+
+            <div class="price">
+                NT$95
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('煙燻鮭魚沙拉',95)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>酪梨沙拉</h3>
+
+                <div class="description">
+                    酪梨、生菜、小番茄、玉米、水煮蛋
+                </div>
+            </div>
+
+            <div class="price">
+                NT$85
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('酪梨沙拉',85)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>水果優格沙拉</h3>
+
+                <div class="description">
+                    季節水果、優格、燕麥、蜂蜜
+                </div>
+            </div>
+
+            <div class="price">
+                NT$70
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('水果優格沙拉',70)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ===== 小點 ===== -->
+
+<div class="category">
+
+    <div class="category-title">
+        <h2>🍟 小點</h2>
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>薯餅</h3>
+
+                <div class="description">
+                    馬鈴薯
+                </div>
+            </div>
+
+            <div class="price">
+                NT$30
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('薯餅',30)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>薯條</h3>
+
+                <div class="description">
+                    馬鈴薯、鹽
+                </div>
+            </div>
+
+            <div class="price">
+                NT$35
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('薯條',35)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>雞塊</h3>
+
+                <div class="description">
+                    雞肉、麵衣
+                </div>
+            </div>
+
+            <div class="price">
+                NT$45
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('雞塊',45)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>德式香腸</h3>
+
+                <div class="description">
+                    豬肉香腸
+                </div>
+            </div>
+
+            <div class="price">
+                NT$45
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('德式香腸',45)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>玉米濃湯</h3>
+
+                <div class="description">
+                    玉米、鮮奶、奶油
+                </div>
+            </div>
+
+            <div class="price">
+                NT$40
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('玉米濃湯',40)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ===== 飲品 ===== -->
+
+<div class="category">
+
+    <div class="category-title">
+        <h2>☕ 飲品</h2>
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>美式咖啡</h3>
+            </div>
+
+            <div class="price">
+                NT$40
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('美式咖啡',40)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>拿鐵咖啡</h3>
+            </div>
+
+            <div class="price">
+                NT$50
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('拿鐵咖啡',50)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>奶茶</h3>
+            </div>
+
+            <div class="price">
+                NT$40
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('奶茶',40)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>檸檬紅茶</h3>
+            </div>
+
+            <div class="price">
+                NT$35
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('檸檬紅茶',35)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+
+    <div class="food">
+
+        <div class="food-top">
+
+            <div>
+                <h3>柳橙汁</h3>
+            </div>
+
+            <div class="price">
+                NT$40
+            </div>
+
+        </div>
+
+        <button class="add-btn"
+            onclick="openNote('柳橙汁',40)">
+            ＋ 加入購物車
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     CART
+========================= -->
+
+<div class="cart">
+
+    <div class="cart-inner">
+
+        <div class="cart-header">
+
+            <div class="cart-title">
+                🛒 購物車
+                <span class="cart-count"
+                    id="cartCount">
+                    0
+                </span>
+            </div>
+
+            <button
+                class="clear-btn"
+                onclick="clearCart()">
+                清空購物車
+            </button>
+
+        </div>
+
+
+        <div
+            class="cart-items"
+            id="cartItems">
+
+            尚未選擇餐點
+
+        </div>
+
+
+        <div class="cart-bottom">
+
+            <div class="total">
+
+                總計：
+                NT$<span id="total">0</span>
+
+            </div>
+
+
+            <button
+                class="order-btn"
+                onclick="openOrder()">
+
+                📋 確認送出訂單
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div
+    class="toast"
+    id="toast">
+
+    已加入購物車！
+
+</div>
+
+
+<!-- =========================
+     ITEM NOTE MODAL
+========================= -->
+
+<div class="modal" id="noteModal">
+
+    <div class="modal-box">
+
+        <h2>📝 餐點備註</h2>
+
+        <div class="order-info">
+
+            <div>
+                餐點：
+                <strong id="noteItemName">-</strong>
+            </div>
+
+            <div>
+                價格：
+                NT$<strong id="noteItemPrice">0</strong>
+            </div>
+
+        </div>
+
+        <div class="note-box">
+
+            <label for="itemNote">
+                備註（例如：少糖、無糖、少冰、不要洋蔥）
+            </label>
+
+            <textarea
+                id="itemNote"
+                class="note-input"
+                placeholder="請輸入餐點備註，例如：奶茶少糖、少冰"></textarea>
+
+        </div>
+
+        <div class="modal-buttons">
+
+            <button class="cancel-btn" onclick="closeNote()">
+                取消
+            </button>
+
+            <button class="confirm-btn" onclick="addItemWithNote()">
+                加入購物車
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     ORDER MODAL
+========================= -->
+
+<div
+    class="modal"
+    id="orderModal">
+
+    <div class="modal-box">
+
+        <h2>
+            📋 確認訂單
+        </h2>
+
+
+        <div class="order-info">
+
+            <div>
+                🏪 CACCONVO
+            </div>
+
+            <div>
+                🍽️ 用餐方式：
+                <strong id="orderDiningMethod">內用</strong>
+            </div>
+
+            <div>
+                🪑 桌號：
+                <strong id="orderTable">
+                    -
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div
+            class="order-list"
+            id="orderList">
+        </div>
+
+
+        <div
+            style="
+                text-align:right;
+                font-size:20px;
+                font-weight:bold;
+            ">
+
+            總計：
+            NT$<span id="orderTotal">0</span>
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                onclick="closeOrder()">
+
+                返回修改
+
+            </button>
+
+
+            <button
+                class="confirm-btn"
+                onclick="submitOrder()">
+
+                確認送出
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+    /* =========================
+       CART DATA
+    ========================= */
+
+    let cart = [];
+
+
+    /* =========================
+       DINING METHOD
+    ========================= */
+
+    function getDiningMethod() {
+
+        const selected =
+            document.querySelector(
+                'input[name="diningMethod"]:checked'
+            );
+
+        return selected ? selected.value : "內用";
+
+    }
+
+
+    function toggleTable() {
+
+        const method = getDiningMethod();
+
+        const tableSection =
+            document.getElementById("tableSection");
+
+        const tableNumber =
+            document.getElementById("tableNumber");
+
+        if (method === "外帶") {
+
+            tableSection.classList.add("hidden");
+            tableNumber.value = "";
+
+        } else {
+
+            tableSection.classList.remove("hidden");
+
+        }
+
+    }
+
+
+    /* =========================
+       ITEM NOTE MODAL
+    ========================= */
+
+    let pendingItem = null;
+
+
+    function openNote(name, price) {
+
+        pendingItem = {
+            name: name,
+            price: price
+        };
+
+        document.getElementById(
+            "noteItemName"
+        ).innerText = name;
+
+        document.getElementById(
+            "noteItemPrice"
+        ).innerText = price;
+
+        document.getElementById(
+            "itemNote"
+        ).value = "";
+
+        document.getElementById(
+            "noteModal"
+        ).classList.add("show");
+
+        setTimeout(function() {
+
+            document.getElementById(
+                "itemNote"
+            ).focus();
+
+        }, 100);
+
+    }
+
+
+    function closeNote() {
+
+        document.getElementById(
+            "noteModal"
+        ).classList.remove("show");
+
+        pendingItem = null;
+
+    }
+
+
+    function addItemWithNote() {
+
+        if (!pendingItem) {
+            return;
+        }
+
+        const note =
+            document.getElementById(
+                "itemNote"
+            ).value.trim();
+
+        cart.push({
+
+            name: pendingItem.name,
+            price: pendingItem.price,
+            quantity: 1,
+            note: note
+
+        });
+
+        updateCart();
+
+        showToast(
+            pendingItem.name +
+            " 已加入購物車"
+        );
+
+        closeNote();
+
+    }
+
+
+    /* =========================
+       ADD TO CART
+    ========================= */
+
+    function addToCart(name, price, note = "") {
+
+        cart.push({
+
+            name: name,
+            price: price,
+            quantity: 1,
+            note: note
+
+        });
+
+        updateCart();
+
+        showToast(
+            name + " 已加入購物車"
+        );
+
+    }
+
+
+    function escapeHtml(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =========================
+       UPDATE CART
+    ========================= */
+
+    function updateCart() {
+
+        let cartItems =
+            document.getElementById(
+                "cartItems"
+            );
+
+        let cartCount =
+            document.getElementById(
+                "cartCount"
+            );
+
+        let totalElement =
+            document.getElementById(
+                "total"
+            );
+
+
+        let total = 0;
+
+        let count = 0;
+
+
+        if (cart.length === 0) {
+
+            cartItems.innerHTML =
+                "尚未選擇餐點";
+
+            cartCount.innerText = "0";
+
+            totalElement.innerText = "0";
+
+            return;
+
+        }
+
+
+        let html = "";
+
+
+        cart.forEach(function(item, index) {
+
+            let itemTotal =
+                item.price * item.quantity;
+
+            total += itemTotal;
+            count += item.quantity;
+
+            html += `
+
+                <div class="cart-item">
+
+                    <div class="cart-item-name">
+
+                        <div>
+                            ${item.name}
+                        </div>
+
+                        ${
+                            item.note
+                                ? `<div class="cart-note">📝 ${escapeHtml(item.note)}</div>`
+                                : ""
+                        }
+
+                    </div>
+
+                    <div class="quantity">
+
+                        <button
+                            onclick="changeQuantity(${index}, -1)">
+                            −
+                        </button>
+
+                        <span>
+                            ${item.quantity}
+                        </span>
+
+                        <button
+                            onclick="changeQuantity(${index}, 1)">
+                            +
+                        </button>
+
+                    </div>
+
+                    <div class="item-price">
+                        NT$${itemTotal}
+                    </div>
+
+                    <button
+                        onclick="removeItem(${index})"
+                        style="
+                            border:none;
+                            background:none;
+                            color:#999;
+                            cursor:pointer;
+                        ">
+                        🗑️
+                    </button>
+
+                </div>
+
+            `;
+
+        });
+
+
+        cartItems.innerHTML = html;
+
+        cartCount.innerText = count;
+
+        totalElement.innerText = total;
+
+    }
+
+
+    /* =========================
+       CHANGE QUANTITY
+    ========================= */
+
+    function changeQuantity(index, amount) {
+
+        cart[index].quantity += amount;
+
+
+        if (cart[index].quantity <= 0) {
+
+            cart.splice(index, 1);
+
+        }
+
+
+        updateCart();
+
+    }
+
+
+    /* =========================
+       REMOVE ITEM
+    ========================= */
+
+    function removeItem(index) {
+
+        cart.splice(index, 1);
+
+        updateCart();
+
+    }
+
+
+    /* =========================
+       CLEAR CART
+    ========================= */
+
+    function clearCart() {
+
+        if (cart.length === 0) {
+
+            return;
+
+        }
+
+
+        let confirmClear =
+            confirm(
+                "確定要清空購物車嗎？"
+            );
+
+
+        if (confirmClear) {
+
+            cart = [];
+
+            updateCart();
+
+        }
+
+    }
+
+
+    /* =========================
+       OPEN ORDER
+    ========================= */
+
+    function openOrder() {
+
+        if (cart.length === 0) {
+
+            alert(
+                "請先選擇餐點！"
+            );
+
+            return;
+        }
+
+        const method =
+            getDiningMethod();
+
+        const table =
+            document.getElementById(
+                "tableNumber"
+            ).value;
+
+        if (
+            method === "內用" &&
+            table === ""
+        ) {
+
+            alert(
+                "請先選擇桌號！"
+            );
+
+            return;
+
+        }
+
+        document.getElementById(
+            "orderDiningMethod"
+        ).innerText = method;
+
+        document.getElementById(
+            "orderTable"
+        ).innerText =
+            method === "外帶"
+                ? "外帶"
+                : table + "號桌";
+
+        let orderList =
+            document.getElementById(
+                "orderList"
+            );
+
+        let html = "";
+
+        cart.forEach(function(item) {
+
+            html += `
+
+                <div class="order-row">
+
+                    <span>
+
+                        ${item.name}
+                        × ${item.quantity}
+
+                        ${
+                            item.note
+                                ? `<div class="order-note">📝 備註：${escapeHtml(item.note)}</div>`
+                                : ""
+                        }
+
+                    </span>
+
+                    <strong>
+                        NT$${item.price * item.quantity}
+                    </strong>
+
+                </div>
+
+            `;
+
+        });
+
+        orderList.innerHTML = html;
+
+        document.getElementById(
+            "orderTotal"
+        ).innerText =
+            calculateTotal();
+
+        document.getElementById(
+            "orderModal"
+        ).classList.add("show");
+
+    }
+
+
+    /* =========================
+       CLOSE ORDER
+    ========================= */
+
+    function closeOrder() {
+
+        document.getElementById(
+            "orderModal"
+        ).classList.remove("show");
+
+    }
+
+
+    /* =========================
+       CALCULATE TOTAL
+    ========================= */
+
+    function calculateTotal() {
+
+        let total = 0;
+
+
+        cart.forEach(function(item) {
+
+            total +=
+                item.price *
+                item.quantity;
+
+        });
+
+
+        return total;
+
+    }
+
+
+    /* =========================
+       SUBMIT ORDER
+    ========================= */
+
+    function submitOrder() {
+
+        const method =
+            getDiningMethod();
+
+        const table =
+            document.getElementById(
+                "tableNumber"
+            ).value;
+
+        const orderNumber =
+            "CAC" +
+            Date.now()
+                .toString()
+                .slice(-5);
+
+        let orderMessage =
+            "訂單已送出！\n\n" +
+            "店家：CACCONVO\n" +
+            "用餐方式：" +
+            method +
+            "\n";
+
+        if (method === "內用") {
+
+            orderMessage +=
+                "桌號：" +
+                table +
+                "號桌\n";
+
+        } else {
+
+            orderMessage +=
+                "取餐方式：外帶\n";
+
+        }
+
+        orderMessage +=
+            "訂單編號：" +
+            orderNumber +
+            "\n\n" +
+            "餐點：\n";
+
+        cart.forEach(function(item) {
+
+            orderMessage +=
+                item.name +
+                " × " +
+                item.quantity +
+                "  NT$" +
+                (item.price * item.quantity) +
+                "\n";
+
+            if (item.note) {
+
+                orderMessage +=
+                    "備註：" +
+                    item.note +
+                    "\n";
+
+            }
+
+        });
+
+        orderMessage +=
+            "\n總計：NT$" +
+            calculateTotal() +
+            "\n\n" +
+            "謝謝您的點餐！";
+
+        alert(orderMessage);
+
+        cart = [];
+
+        updateCart();
+
+        closeOrder();
+
+    }
+
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    function showToast(message) {
+
+        let toast =
+            document.getElementById(
+                "toast"
+            );
+
+
+        toast.innerText = message;
+
+        toast.classList.add("show");
+
+
+        setTimeout(function() {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        }, 1800);
+
+    }
+
+
+    /* =========================
+       INITIAL
+    ========================= */
+
+    updateCart();
+    toggleTable();
+
+
+</script>
+
+
+</body>
+
+</html>
